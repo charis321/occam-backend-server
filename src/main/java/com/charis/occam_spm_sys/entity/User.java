@@ -1,7 +1,7 @@
 package com.charis.occam_spm_sys.entity;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -15,8 +15,8 @@ import lombok.Data;
 
 @Data
 @TableName("users")
-public class User implements Serializable{
-	
+public class User implements Serializable {
+
 	@TableId(type = IdType.ASSIGN_ID)
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long id;
@@ -28,9 +28,9 @@ public class User implements Serializable{
 	private int role;
 	private int status;
 	private int sex;
-	
+
 	@TableField(fill = FieldFill.INSERT)
-	private LocalDateTime createTime;
+	private OffsetDateTime createTime;
 	@TableField(fill = FieldFill.INSERT_UPDATE)
-	private LocalDateTime updateTime;
+	private OffsetDateTime updateTime;
 }

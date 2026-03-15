@@ -1,34 +1,25 @@
 package com.charis.occam_spm_sys.controller;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.charis.occam_spm_sys.common.JWTUtil;
-import com.charis.occam_spm_sys.common.JWTUtilOAuth;
-import com.charis.occam_spm_sys.common.OCPasswordEncoder;
-import com.charis.occam_spm_sys.common.QueryPageParam;
 import com.charis.occam_spm_sys.common.Result;
 import com.charis.occam_spm_sys.entity.User;
-import com.charis.occam_spm_sys.service.StudentService;
 import com.charis.occam_spm_sys.service.UserService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/api/user")
 @CrossOrigin(value = "http://localhost:5173")
@@ -41,6 +32,7 @@ public class UserController {
 	
 	@GetMapping("/{userId}")
 	public Result getUserInfo(@PathVariable Long userId) {
+//		log.info("正在查詢用戶資訊，ID: {}", userId);
 		return Result.success(userService.getUserInfoVO(userId));
 	}
 	

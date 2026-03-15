@@ -35,7 +35,6 @@ public class AuthServiceImpl implements AuthService{
 	
 	@Override
 	public Result login(User user){
-		System.out.println(user);
 		List<User> userList = userService.findUserByEmail(user.getEmail());
 		if(userList.size()==0) return Result.fail("此信箱並未註冊!");
 		if(userList.size()!=1) return Result.fail("系統錯誤!");

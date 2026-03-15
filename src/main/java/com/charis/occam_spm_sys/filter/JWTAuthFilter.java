@@ -1,8 +1,8 @@
 package com.charis.occam_spm_sys.filter;
 
 import java.io.IOException;
+import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,18 +11,17 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.charis.occam_spm_sys.common.JWTUtil;
 import com.charis.occam_spm_sys.common.Result;
-import com.charis.occam_spm_sys.entity.User;
-import com.charis.occam_spm_sys.security.OCUserDetails;
 import com.charis.occam_spm_sys.security.OCUserDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 public class JWTAuthFilter extends OncePerRequestFilter{
 	
@@ -38,12 +37,16 @@ public class JWTAuthFilter extends OncePerRequestFilter{
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
+		
 		String auth = request.getHeader("Authorization");
+		String path = request.getRequestURI();
+		
 		if(auth != null && auth.startsWith("Bearer ")){
+			String token = auth.substring(7);	
 			try {
-				String token = auth.substring(7);	
-				String email = (String)jwtUtil.parseToken(token).get("email");
-				System.out.println("filter email: "+ email);
+				Map<String, Object> claims = jwtUtil.parseToken(token);
+				String email = (String)claims.get("email");
+				log.info("用戶JWT驗證成功 | Email:{} | Resquest Path:{}", email, path);
 
 				UserDetails userDetails = ocUserDetailsService.loadUserByUsername(email);
 				UsernamePasswordAuthenticationToken authenticationToken =
@@ -51,7 +54,10 @@ public class JWTAuthFilter extends OncePerRequestFilter{
 				SecurityContextHolder.getContext().setAuthentication(authenticationToken); 
 				filterChain.doFilter(request, response);
 			}catch(ExpiredJwtException e) {
+				log.warn("JWT 已過期 | Resquest Path: {} | Msg: {}", path, e.getMessage());
 				sendResponse(response, 401, "JWT_EXPIRED");
+			}catch(Exception e) {
+				log.error("JWT 解析異常 | Msg:{}", e.getMessage());
 			}
 		}else {
 			filterChain.doFilter(request, response);

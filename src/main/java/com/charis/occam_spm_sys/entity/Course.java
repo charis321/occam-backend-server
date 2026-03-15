@@ -3,6 +3,7 @@ package com.charis.occam_spm_sys.entity;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.OffsetDateTime;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -15,7 +16,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 @Data
-@TableName("course")
+@TableName("courses")
 public class Course implements Serializable {
 	
 	@TableId(type = IdType.ASSIGN_ID)
@@ -34,9 +35,9 @@ public class Course implements Serializable {
 	private String info;
 	
 	@TableField(fill = FieldFill.INSERT)
-	private LocalDateTime createTime;
+	private OffsetDateTime createTime;
 	@TableField(fill = FieldFill.INSERT_UPDATE)
-	private LocalDateTime updateTime;
+	private OffsetDateTime updateTime;
 	
 	private int status;
 }

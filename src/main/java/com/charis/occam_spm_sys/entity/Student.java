@@ -1,6 +1,7 @@
 package com.charis.occam_spm_sys.entity;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -13,7 +14,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 @Data
-@TableName("student")
+@TableName("students")
 public class Student {
 	
 	@TableId(type = IdType.ASSIGN_ID)
@@ -29,7 +30,7 @@ public class Student {
 	private int status;
 	
 	@TableField(fill = FieldFill.INSERT)
-	private LocalDateTime createTime;
+	private OffsetDateTime createTime;
 	@TableField(fill = FieldFill.INSERT_UPDATE)
-	private LocalDateTime updateTime;
+	private OffsetDateTime updateTime;
 }

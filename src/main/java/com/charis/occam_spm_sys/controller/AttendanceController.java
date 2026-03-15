@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.charis.occam_spm_sys.common.Result;
 import com.charis.occam_spm_sys.entity.Attendance;
-import com.charis.occam_spm_sys.entity.Lesson;
 import com.charis.occam_spm_sys.service.AttendanceService;
+
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/attendance")
+@Slf4j
 public class AttendanceController {
 	
 	@Autowired

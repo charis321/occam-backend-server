@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: occam_spm_sys
+
+  datasource:
+    # 這裡放目前的連線資訊 (PostgreSQL)
+    url: jdbc:postgresql://localhost:5432/occam_db?serverTimezone=UTC&useSSL=false
+    username: postgres
+    password: password123
+    driver-class-name: org.postgresql.Driver
+    
+    # 提示：如果要換成 Render 雲端資料庫，只需修改 url 並使用環境變數：
+    # url: jdbc:postgresql://dpg-d1iu7h7diees73cciha0-a.oregon-postgres.render.com:5432/occam_db
+    # username: ${DB_USER}
+    # password: ${DB_PASSWORD}
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    default-schema: public
+
+  http:
+    encoding:
+      force: true
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  
