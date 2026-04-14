@@ -1,11 +1,11 @@
-package com.charis.occam_spm_sys.vo;
+package com.charis.occam_spm_sys.model.vo;
 
 import java.time.LocalTime;
 
 import lombok.Data;
 
 @Data
-public class AttendanceCourseDetail {
+public class AttendanceCourseDetailVO {
 	
 	private Long id;
 	private Long studentId;

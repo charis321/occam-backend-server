@@ -15,8 +15,11 @@ public class Result {
 	public static Result fail(String msg) {
 		return result(400, msg, 0L, null);
 	}
-	public static Result fail(int code , String msg) {
+	public static Result fail(int code, String msg) {
 		return result(code, msg, 0L, null);
+	}
+	public static Result fail(int code, String msg, Object data) {
+		return result(code, msg, 0L, data);
 	}
 	
 	

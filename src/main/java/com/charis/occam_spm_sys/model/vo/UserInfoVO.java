@@ -1,6 +1,7 @@
-package com.charis.occam_spm_sys.vo;
+package com.charis.occam_spm_sys.model.vo;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -26,8 +27,7 @@ public class UserInfoVO {
 	private int sex;
 	
 	private Boolean isVaild;
-	private Student studentInfo; 
 	
-	private LocalDateTime createTime;
-	private LocalDateTime updateTime;
+	private OffsetDateTime createTime;
+	private OffsetDateTime updateTime;
 }

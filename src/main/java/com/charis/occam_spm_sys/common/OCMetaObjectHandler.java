@@ -1,6 +1,6 @@
 package com.charis.occam_spm_sys.common;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
@@ -12,13 +12,13 @@ public class OCMetaObjectHandler implements MetaObjectHandler{
 
 	@Override
 	public void insertFill(MetaObject metaObject) {
-		this.strictInsertFill(metaObject, "createTime", LocalDateTime.class, LocalDateTime.now());
-		this.strictInsertFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
+		this.strictInsertFill(metaObject, "createTime", OffsetDateTime.class, OffsetDateTime.now());
+		this.strictInsertFill(metaObject, "updateTime", OffsetDateTime.class, OffsetDateTime.now());
 	}
 
 	@Override
 	public void updateFill(MetaObject metaObject) {
-		this.strictUpdateFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
+		this.strictUpdateFill(metaObject, "updateTime", OffsetDateTime.class, OffsetDateTime.now());
 		
 	}
 	

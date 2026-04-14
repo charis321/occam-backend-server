@@ -21,14 +21,16 @@ public class User implements Serializable {
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long id;
 	private String name;
+	private int sex;
 	private String email;
 	private String password;
+	private String no;
+	
 	private String school;
 	private String department;
 	private int role;
 	private int status;
-	private int sex;
-
+	
 	@TableField(fill = FieldFill.INSERT)
 	private OffsetDateTime createTime;
 	@TableField(fill = FieldFill.INSERT_UPDATE)

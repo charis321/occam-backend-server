@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class JWTUtil {
    private static final String SECRET_KEY = "betelgeusesiriuscanopusandromeda";
-   private static final long EXPIRATION_TIME = 1000 * 60 * 60 *24;
+   private static final long EXPIRATION_TIME = 1000L * 60 * 60 * 24 * 7;
 //   private static final long EXPIRATION_TIME = 1000;
    private final Key key =  Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 
@@ -49,7 +49,6 @@ public class JWTUtil {
 			   				.build()
 			   				.parseClaimsJws(token)
 			   				.getBody();
-	   
 	   Map<String, Object> payload = new HashMap<>(claims);
 	   return payload;
    }

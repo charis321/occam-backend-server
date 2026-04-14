@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.charis.occam_spm_sys.common.Result;
 import com.charis.occam_spm_sys.entity.User;
+import com.charis.occam_spm_sys.model.dto.UserQueryDTO;
 import com.charis.occam_spm_sys.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -27,36 +28,53 @@ public class UserController {
 	
 	@Autowired
 	private UserService userService;
-//	@Autowired
-//	private StudentService studentService;
 	
 	@GetMapping("/{userId}")
-	public Result getUserInfo(@PathVariable Long userId) {
-//		log.info("正在查詢用戶資訊，ID: {}", userId);
-		return Result.success(userService.getUserInfoVO(userId));
+	public Result getUser(@PathVariable Long userId) {
+		log.info("正在查詢用戶資訊，ID: {}", userId);
+		return Result.success(userService.getById(userId));
 	}
 	
+	@GetMapping
+	public Result getUsers(UserQueryDTO query) {
+		log.info("正在條件查詢用戶資訊，Query: {}", query);
+		return Result.success(userService.getUsersByQuery(query));
+	}
+	
+	
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/save")
 	public Result save(@RequestBody User user){	
 		return userService.save(user)?Result.success():Result.fail();
 	}
 	
-	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("/list")
-	public Result list(){
-		return Result.success(userService.getUserInfoVOList());
-	}
+//	@PreAuthorize("hasRole('ADMIN')")
+//	@PostMapping("/saveList")
+//	public Result save(@RequestBody List<User> user){	
+//		return userService.s?Result.success():Result.fail();
+//	}
 	
+//	@PreAuthorize("hasRole('ADMIN')")
+//	@GetMapping
+//	public Result getUserList(){
+//		return Result.success(userService.getUserInfoVOList());
+//	}
+	
+	@PreAuthorize("hasRole('ADMIN')")
 	@PatchMapping("/{userId}")
 	public Result update(@PathVariable Long userId,
 						 @RequestBody Map<String, Object> params) {
 		return userService.patch(userId, params)?Result.success("用戶更新成功"):Result.fail("用戶更新失敗");
 	}
 	
+	
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/delete")
 	public Result delete(@RequestBody User user) {
 		return userService.removeById(user.getId())?Result.success():Result.fail();
 	}
+	
+	
 	
 //	@PostMapping("listPage")
 //	public Result listPage(@RequestBody QueryPageParam query) {

@@ -20,10 +20,10 @@ public class TeacherController {
 	@Autowired
 	private CourseService courseService;
 	
-	@GetMapping("/{userId}/course/list")
-	public List<Course> getCourseListByTeacherId(@PathVariable Long userId) {
-		return courseService.findCourseByTeacherId(userId);
-	}
+//	@GetMapping("/{userId}/course/list")
+//	public List<Course> getCourseListByTeacherId(@PathVariable Long userId) {
+//		return courseService.getCourseByTeacherId(userId);
+//	}
 	
 //	@GetMapping("/{userId}/course/{}")
 //	public List<Course> getCourseByTeacherId(@PathVariable int userId) {

@@ -52,17 +52,15 @@ public class JWTAuthFilter extends OncePerRequestFilter{
 				UsernamePasswordAuthenticationToken authenticationToken =
 	                  new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 				SecurityContextHolder.getContext().setAuthentication(authenticationToken); 
-				filterChain.doFilter(request, response);
 			}catch(ExpiredJwtException e) {
 				log.warn("JWT 已過期 | Resquest Path: {} | Msg: {}", path, e.getMessage());
 				sendResponse(response, 401, "JWT_EXPIRED");
 			}catch(Exception e) {
 				log.error("JWT 解析異常 | Msg:{}", e.getMessage());
 			}
-		}else {
-			filterChain.doFilter(request, response);
 		}
-		
+			
+		filterChain.doFilter(request, response);
 	}
 	
 	private void sendResponse(HttpServletResponse response, int code, String msg) throws IOException {

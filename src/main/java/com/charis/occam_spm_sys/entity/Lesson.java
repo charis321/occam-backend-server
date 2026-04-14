@@ -25,12 +25,12 @@ public class Lesson {
 	private Long courseId;
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long teacherId;
-	private LocalDate date;
-	private LocalTime startTime;
-	private LocalTime endTime;
-	private String duration;
+	private OffsetDateTime startTime;
+	private OffsetDateTime endTime;
+	
 	private String classroom;
 	private int attendanceStatus;
+	private String attendanceCode;
 	private int status;
 	
 	@TableField(fill = FieldFill.INSERT)

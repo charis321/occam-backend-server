@@ -1,4 +1,4 @@
-package com.charis.occam_spm_sys.vo;
+package com.charis.occam_spm_sys.model.vo;
 
 import java.time.LocalDateTime;
 import java.util.List;
