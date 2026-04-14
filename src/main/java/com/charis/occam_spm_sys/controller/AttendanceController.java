@@ -26,6 +26,7 @@ public class AttendanceController {
 	
 	@GetMapping("/attendance")
 	public Result getAttendance() {
+		
 		return Result.success(attendanceService.list());
 	}
 	@GetMapping("/lesson/{lessonId}/attendance")
