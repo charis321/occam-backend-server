@@ -11,6 +11,8 @@ import com.charis.occam_spm_sys.entity.Attendance;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
+//廢棄
+
 public class StudentAttendanceVO {
 	@TableId(type = IdType.ASSIGN_ID)
 	@JsonSerialize(using = ToStringSerializer.class)

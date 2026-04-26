@@ -21,12 +21,12 @@ public class OCUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		//use email for auth
-		System.out.println("email:"+email);
-		List<User> userList = userService.findUserByEmail(email);
-		if(userList.size()!=1) {throw new UsernameNotFoundException("email 有誤");}
+//		System.out.println("email:"+email);
+		User user = userService.findUserByEmail(email);
+		if(user==null) {throw new UsernameNotFoundException("email 有誤");}
 		
-		UserDetails userDetails = new OCUserDetails(userList.get(0));
-		System.out.println(userDetails.getAuthorities());
+		UserDetails userDetails = new OCUserDetails(user);
+//		System.out.println(userDetails.getAuthorities());
 		return userDetails;
 	}
 }

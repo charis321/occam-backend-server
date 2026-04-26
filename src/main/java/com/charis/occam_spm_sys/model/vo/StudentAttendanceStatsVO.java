@@ -6,20 +6,17 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 @Data
-public class CourseAttendanceDetailVO {
-	
-	@JsonSerialize(using = ToStringSerializer.class)
-	private Long courseId;
-	private Integer lessonId;
-	private Integer lessonIndex;
+public class StudentAttendanceStatsVO {
 	
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long studentId;
 	private String studentName;
+	private String studentNo;
 	private String studentSchool;
 	private String studentDepartment;
-	private String studentNo;
-	private int studentSex;
-	private Integer attendanceStatus;
 	
+	
+	private Integer presentCount;
+	private Integer excusedCount;
+	private Integer absentCount;
 }

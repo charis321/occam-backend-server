@@ -6,4 +6,5 @@ import lombok.Data;
 public class RollcallDTO {
 	private int attendance_status;
 	private String attendance_code;
+
 }

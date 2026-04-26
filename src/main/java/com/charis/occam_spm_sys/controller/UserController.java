@@ -1,10 +1,9 @@
 package com.charis.occam_spm_sys.controller;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,46 +31,37 @@ public class UserController {
 	@GetMapping("/{userId}")
 	public Result getUser(@PathVariable Long userId) {
 		log.info("正在查詢用戶資訊，ID: {}", userId);
-		return Result.success(userService.getById(userId));
+		return Result.success(userService.getUserById(userId));
 	}
 	
 	@GetMapping
-	public Result getUsers(UserQueryDTO query) {
+	public Result listUsers(UserQueryDTO query) {
 		log.info("正在條件查詢用戶資訊，Query: {}", query);
 		return Result.success(userService.getUsersByQuery(query));
 	}
 	
-	
 	@PreAuthorize("hasRole('ADMIN')")
-	@PostMapping("/save")
+	@PostMapping
 	public Result save(@RequestBody User user){	
-		return userService.save(user)?Result.success():Result.fail();
+		log.info("正在新增用戶，ID: {}", user.getId());
+		return userService.save(user)?Result.success("用戶新增成功"):Result.fail("用戶新增失敗");
 	}
-	
-//	@PreAuthorize("hasRole('ADMIN')")
-//	@PostMapping("/saveList")
-//	public Result save(@RequestBody List<User> user){	
-//		return userService.s?Result.success():Result.fail();
-//	}
-	
-//	@PreAuthorize("hasRole('ADMIN')")
-//	@GetMapping
-//	public Result getUserList(){
-//		return Result.success(userService.getUserInfoVOList());
-//	}
 	
 	@PreAuthorize("hasRole('ADMIN')")
 	@PatchMapping("/{userId}")
-	public Result update(@PathVariable Long userId,
-						 @RequestBody Map<String, Object> params) {
-		return userService.patch(userId, params)?Result.success("用戶更新成功"):Result.fail("用戶更新失敗");
+	public Result patch(@PathVariable Long userId,
+						@RequestBody UserQueryDTO query) {
+		log.info("正在更新用戶資訊，Query: {}", query);
+		query.setId(userId);
+		return userService.patchUserByQuery(query)?Result.success("用戶更新成功"):Result.fail("用戶更新失敗");
 	}
 	
 	
 	@PreAuthorize("hasRole('ADMIN')")
-	@PostMapping("/delete")
-	public Result delete(@RequestBody User user) {
-		return userService.removeById(user.getId())?Result.success():Result.fail();
+	@DeleteMapping("/{userId}")
+	public Result delete(@PathVariable Long userId) {
+		log.info("正在刪除用戶，ID: {}", userId);
+		return userService.removeById(userId)?Result.success("用戶刪除成功"):Result.fail("用戶刪除失敗");
 	}
 	
 	

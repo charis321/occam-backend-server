@@ -10,14 +10,14 @@ import com.charis.occam_spm_sys.model.vo.UserInfoVO;
 
 
 public interface UserService extends IService<User>{
-	
-	public List<User> getUsersByQuery(UserQueryDTO query);
-	public List<User> findUserByEmail(String email);
+	public UserInfoVO getUserById(Long userId);
+	public List<UserInfoVO> getUsersByQuery(UserQueryDTO query);
+	public User findUserByEmail(String email);
+	public List<User> findUsersByEmail(List<String> emails);
 //	public Boolean existsByEmail(Long Email);
 	
-	public Boolean patch(Long userId, Map<String, Object> params);
+	public Boolean patchUserByQuery(UserQueryDTO query);
 	
-	public UserInfoVO getUserInfoVO(Long userId);
-	public List<UserInfoVO> getUserInfoVOList();
+//	public List<UserInfoVO> getUserInfoVOList();
 	
 }

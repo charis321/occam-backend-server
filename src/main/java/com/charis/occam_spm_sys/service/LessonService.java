@@ -9,10 +9,11 @@ import com.charis.occam_spm_sys.model.vo.LessonDetailVO;
 
 public interface LessonService extends IService<Lesson>{
 	public List<Lesson> getLessonListByCourseId(Long courseId);
-	public List<LessonDetailVO>  getLessonListByTeacherId(Long teacherId);
-	public List<LessonDetailVO> getLessonListByStudentId(Long studentId);
+	public LessonDetailVO getLessonDetailById(Integer lessonId);
+	public List<LessonDetailVO> getLessonDetailsByTeacherId(Long teacherId);
+	public List<LessonDetailVO> getLessonDetailsByStudentId(Long studentId);
 	
-	public List<LessonDetailVO> getLessonDetailVOByCourseId(Long courseId);
+	public List<LessonDetailVO> getLessonDetailsByCourseId(Long courseId);
 	
 	public Boolean deleteLesson(Integer lessonId);
 	public Boolean deleteLessonsByCourseId(Long courseId);

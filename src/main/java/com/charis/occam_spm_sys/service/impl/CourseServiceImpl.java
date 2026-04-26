@@ -2,6 +2,7 @@ package com.charis.occam_spm_sys.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,11 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.charis.occam_spm_sys.entity.Course;
 import com.charis.occam_spm_sys.mapper.CourseMapper;
+import com.charis.occam_spm_sys.model.dto.CourseUpdateDTO;
 import com.charis.occam_spm_sys.model.vo.CourseDetailVO;
 import com.charis.occam_spm_sys.service.CourseService;
 import com.charis.occam_spm_sys.service.EnrollmentService;
 import com.charis.occam_spm_sys.service.LessonService;
-
 
 @Service
 public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements CourseService {
@@ -25,9 +26,7 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
 
 	@Override
 	public List<Course> getCoursesByTeacherId(Long teacherId) {
-		return  this.lambdaQuery()
-					.eq(Course::getTeacherId, teacherId)
-					.list();
+		return this.lambdaQuery().eq(Course::getTeacherId, teacherId).list();
 	}
 
 	@Override
@@ -43,6 +42,14 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
 	@Override
 	public List<CourseDetailVO> getCourseDetailVOByStudentId(Long studentId) {
 		return baseMapper.selectDetailsByStudentId(studentId);
+	}
+
+	@Override
+	public Boolean updateCourse(Long courseId, CourseUpdateDTO dto) {
+		Course course = new Course();
+		BeanUtils.copyProperties(dto, course);
+		course.setId(courseId);
+		return this.updateById(course);
 	}
 
 	@Override

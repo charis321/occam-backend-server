@@ -19,8 +19,8 @@ import com.charis.occam_spm_sys.common.Result;
 import com.charis.occam_spm_sys.entity.Attendance;
 import com.charis.occam_spm_sys.entity.Lesson;
 import com.charis.occam_spm_sys.model.dto.RollcallDTO;
+import com.charis.occam_spm_sys.model.vo.LessonDetailVO;
 import com.charis.occam_spm_sys.service.AttendanceService;
-
 import com.charis.occam_spm_sys.service.LessonService;
 
 @RestController
@@ -41,23 +41,23 @@ public class LessonController {
 	
 	@GetMapping("/lesson/teacher/{teacherId}")
 	public Result getLessonsByTeacher(@PathVariable Long teacherId) {
-		return Result.success(lessonService.getLessonListByTeacherId(teacherId));
+		return Result.success(lessonService.getLessonDetailsByTeacherId(teacherId));
 	}
 	
 	@GetMapping("/lesson/student/{studentId}")
 	public Result getLessonsByStudent(@PathVariable Long studentId) {
-		return Result.success(lessonService.getLessonListByStudentId(studentId));
+		return Result.success(lessonService.getLessonDetailsByStudentId(studentId));
 	}
 
 	@GetMapping("/course/{courseId}/lesson")
 	public Result getLessonsByCourse(@PathVariable Long courseId) {
-		return Result.success(lessonService.getLessonDetailVOByCourseId(courseId));
+		return Result.success(lessonService.getLessonDetailsByCourseId(courseId));
 	}
 	
 	@GetMapping("/lesson/{lessonId}/attendance/{studentId}")
 	public Result getLessonAttendanceForStudent(@PathVariable Integer lessonId,
 												@PathVariable Long studentId) {
-		Lesson lesson = lessonService.getById(lessonId);
+		LessonDetailVO lesson = lessonService.getLessonDetailById(lessonId);
 		Attendance attendance = attendanceService.getAttendanceByCompoundId(lessonId, studentId);
 		
 		Map<String, Object> data = new HashMap<>();

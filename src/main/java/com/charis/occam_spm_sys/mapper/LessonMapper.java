@@ -32,8 +32,8 @@ public interface LessonMapper extends BaseMapper<Lesson> {
 			FROM lessons l
 			LEFT JOIN users u ON l.teacher_id = u.id
 			LEFT JOIN courses c ON l.course_id = c.id
-			ORDER BY l.course_id ASC, l.start_time ASC
 			WHERE l.id = #{lessonId}
+			ORDER BY l.course_id ASC, l.start_time ASC
 			""")
 	LessonDetailVO selectDetailById(Integer lessonId);
 	

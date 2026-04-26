@@ -37,18 +37,22 @@ public class LessonServiceImpl extends ServiceImpl<LessonMapper, Lesson> impleme
 		List<Lesson> res = this.list(lambdaQueryWrapper);
 		return res;
 	}
-
+	
 	@Override
-	public List<LessonDetailVO> getLessonListByTeacherId(Long teacherId) {
+	public LessonDetailVO getLessonDetailById(Integer lessonId) {
+		return baseMapper.selectDetailById(lessonId);
+	}
+	@Override
+	public List<LessonDetailVO> getLessonDetailsByTeacherId(Long teacherId) {
 		return baseMapper.selectDetailsByTeacherId(teacherId);
 	}
 
 	@Override
-	public List<LessonDetailVO> getLessonListByStudentId(Long studentId) {
+	public List<LessonDetailVO> getLessonDetailsByStudentId(Long studentId) {
 		return baseMapper.selectDetailsByStudentId(studentId);
 	}
 	@Override
-	public List<LessonDetailVO> getLessonDetailVOByCourseId(Long courseId){
+	public List<LessonDetailVO> getLessonDetailsByCourseId(Long courseId){
 		return baseMapper.selectDetailsByCourseId(courseId);
 	}
 

@@ -21,12 +21,11 @@ public class UserInfoVO {
 	private String name;
 	private String email;
 	private int role;
+	private String no;
 	private String school;
 	private String department;
 	private int status;
 	private int sex;
-	
-	private Boolean isVaild;
 	
 	private OffsetDateTime createTime;
 	private OffsetDateTime updateTime;
