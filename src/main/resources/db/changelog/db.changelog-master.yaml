@@ -1,4 +1,14 @@
 databaseChangeLog:
-    - includeAll:
-          path: db/changelog/changes/
-          resourceFilter: ".*\\.yaml"
+  - include:
+      file: db/changelog/changes/001-create-table-attendances.sql
+  - include:
+      file: db/changelog/changes/001-create-table-courses.sql
+  - include:
+      file: db/changelog/changes/001-create-table-enrollments.sql
+  - include:
+      file: db/changelog/changes/001-create-table-lessons.sql
+  - include:
+      file: db/changelog/changes/001-create-table-users.sql
+  
+  - include:
+      file: db/changelog/changes/999-view-course-attendance.yaml
