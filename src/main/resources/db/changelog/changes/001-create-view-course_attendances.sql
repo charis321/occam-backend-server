@@ -1,4 +1,4 @@
-CREATE OR REPLACE VIEW course_attendance AS
+CREATE OR REPLACE VIEW course_attendances AS
 SELECT
     l.course_id,          
     l.id AS lesson_id,
