@@ -63,15 +63,16 @@ public interface AttendanceMapper extends BaseMapper<Attendance> {
 
 	@Select("""
 			select	lesson_id,
+					lesson_attendance_status,
 					start_time,
 					end_time,
-					count(1) filter(where attendance_status = 0) as present_count,
-					count(1) filter(where attendance_status = 1) as excused_count,
-					count(1) filter(where attendance_status = 2) as absent_count,
-					count(1 )as total_count
+					count(1) filter(where attendance_status = 0) as absent_count,
+					count(1) filter(where attendance_status = 1) as present_count,
+					count(1) filter(where attendance_status = 2) as excused_count,
+					count(1)as total_count
 					from course_attendances
 			where course_id = #{courseId}
-			group by lesson_id ,start_time, end_time
+			group by lesson_id ,start_time, end_time, lesson_attendance_status
 			order by start_time asc
 			""")
 	List<LessonAttendanceStatsVO> selectStatsByLesson(Long courseId);
@@ -82,10 +83,10 @@ public interface AttendanceMapper extends BaseMapper<Attendance> {
 					student_school,
 					student_department,
 					student_no,
-					count(1) filter(where attendance_status = 0) as present_count,
-					count(1) filter(where attendance_status = 1) as excused_count,
-					count(1) filter(where attendance_status = 2) as absent_count,
-					count(1 )as total_count
+					count(1) filter(where attendance_status = 0) as absent_count,
+					count(1) filter(where attendance_status = 1) as present_count,
+					count(1) filter(where attendance_status = 2) as excused_count,
+					count(1)as total_count
 					from course_attendances
 			where course_id = #{courseId}
 			group by student_id , student_name,student_school,student_department,student_no

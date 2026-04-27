@@ -19,15 +19,7 @@ import com.charis.occam_spm_sys.service.EnrollmentService;
 
 @Service
 public class AttendanceServiceImpl extends ServiceImpl<AttendanceMapper, Attendance> implements AttendanceService {
-
-	@Autowired
-	private EnrollmentService enrollmentService;
-
-//	@Autowired
-//	private LessonMapper lessonMapper;
-//	@Autowired
-//	private LessonService lessonService;
-
+	
 	@Override
 	public Boolean deleteAttendancesByLessonId(Integer lessonId) {
 		return this.lambdaUpdate().eq(Attendance::getLessonId, lessonId).remove();

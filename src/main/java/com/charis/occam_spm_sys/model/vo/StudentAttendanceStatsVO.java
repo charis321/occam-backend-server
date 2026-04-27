@@ -19,4 +19,5 @@ public class StudentAttendanceStatsVO {
 	private Integer presentCount;
 	private Integer excusedCount;
 	private Integer absentCount;
+	private Integer totalCount;
 }

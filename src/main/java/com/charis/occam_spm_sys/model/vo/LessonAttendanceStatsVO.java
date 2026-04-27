@@ -12,10 +12,12 @@ public class LessonAttendanceStatsVO {
 	
 	private Integer lessonId;
 	private String lessonIndex;
+	private Integer lessonAttendanceStatus;
 	private OffsetDateTime startTime;
 	private OffsetDateTime endTime;
 
 	private Integer presentCount;
 	private Integer excusedCount;
 	private Integer absentCount;
+	private Integer totalCount;
 }

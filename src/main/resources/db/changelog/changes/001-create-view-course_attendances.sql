@@ -2,6 +2,7 @@ CREATE OR REPLACE VIEW course_attendances AS
 SELECT
     l.course_id,          
     l.id AS lesson_id,
+    l.attendance_status as lesson_attendance_status,
     l.start_time,
     l.end_time,
     u.id AS student_id, 
