@@ -30,20 +30,20 @@ public class UserController {
 	
 	@GetMapping("/{userId}")
 	public Result getUser(@PathVariable Long userId) {
-		log.info("正在查詢用戶資訊，ID: {}", userId);
+		log.debug("正在查詢用戶資訊，ID: {}", userId);
 		return Result.success(userService.getUserById(userId));
 	}
 	
 	@GetMapping
 	public Result listUsers(UserQueryDTO query) {
-		log.info("正在條件查詢用戶資訊，Query: {}", query);
+		log.debug("正在條件查詢用戶資訊，Query: {}", query);
 		return Result.success(userService.getUsersByQuery(query));
 	}
 	
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping
 	public Result save(@RequestBody User user){	
-		log.info("正在新增用戶，ID: {}", user.getId());
+		log.debug("正在新增用戶，ID: {}", user.getId());
 		return userService.save(user)?Result.success("用戶新增成功"):Result.fail("用戶新增失敗");
 	}
 	
@@ -51,7 +51,7 @@ public class UserController {
 	@PatchMapping("/{userId}")
 	public Result patch(@PathVariable Long userId,
 						@RequestBody UserQueryDTO query) {
-		log.info("正在更新用戶資訊，Query: {}", query);
+		log.debug("正在更新用戶資訊，Query: {}", query);
 		query.setId(userId);
 		return userService.patchUserByQuery(query)?Result.success("用戶更新成功"):Result.fail("用戶更新失敗");
 	}
