@@ -64,7 +64,7 @@ public class AuthServiceImpl implements AuthService {
 			if (authentication.isAuthenticated()) {
 				String token = jwtUtil.generateToken(existingUser);
 
-				return new UserAuthDTO(existingUser.getId(), existingUser.getName(), existingUser.getRole(), token);
+				return new UserAuthDTO(existingUser.getId(), existingUser.getName(), existingUser.getRole(), existingUser.getSex(), token);
 			}
 		} catch (AuthenticationException e) {
 			log.warn("身分驗證失敗 | msg: " + e.getMessage());

@@ -14,12 +14,14 @@ public class UserAuthDTO {
     private Long id;
     private String name;
     private Integer role;
+    private Integer sex;
     private String token;
 
-    public UserAuthDTO(Long id, String name, Integer role, String token) {
+    public UserAuthDTO(Long id, String name, Integer role, Integer sex,String token) {
         this.id = id;
         this.name = name;
         this.role = role;
+        this.sex = sex;
         this.token = token;
     }
 }
