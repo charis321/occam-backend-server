@@ -50,12 +50,14 @@ public class AttendanceController {
 
 	@PostMapping("/attendance")
 	public Result addAttendance(@RequestBody Attendance attendance) {
-		return attendanceService.save(attendance)?Result.success():Result.fail();
+		attendanceService.saveOrUpdateAttendance(attendance);
+		return Result.success("新增點名成功");
 	}
 
 	@PutMapping("/attendance")
 	public Result updateAttendance(@RequestBody Attendance attendance) {
-		return attendanceService.saveOrUpdateAttendance(attendance)?Result.success():Result.fail();
+		attendanceService.saveOrUpdateAttendance(attendance);
+		return Result.success("更改點名成功");
 	}
 	
 }
