@@ -1,33 +1,32 @@
 package com.charis.occam_spm_sys.model.vo;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.charis.occam_spm_sys.entity.Student;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
 import lombok.Data;
 
 @Data
-public class UserInfoVO {
-	
+public class MessageVO {
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long id;
-	private String name;
-	private String email;
-	private int role;
-	private String no;
-	private String school;
-	private String department;
-	private int status;
-	private int sex;
-	private String avatar;
 	
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long senderId;
+	private String senderName;
+	private int senderRole;
+	
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long receiverId;
+	private String receiverName;
+	private int receiverRole;
+	
+	private String title;
+	private String body;
+	private boolean noted = false; 
+
 	private OffsetDateTime createTime;
-	private OffsetDateTime updateTime;
 }

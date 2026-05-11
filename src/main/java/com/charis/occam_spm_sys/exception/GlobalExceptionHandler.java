@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(SQLException.class)
 	public Result handleSQLException(SQLException e) {
-		log.error("資料庫操作失敗: ", e);
+		log.error("資料庫操作失敗 | error:", e);
 		return Result.fail(500, "資料庫操作失敗");
 	}
 
@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(AccessDeniedException.class)
 	public Result handleAccessDeniedException(AccessDeniedException e) {
-		log.warn("權限不足嘗試訪問 | msg {}", e.getMessage());
+		log.warn("權限不足嘗試訪問 | msg:{}", e.getMessage());
 		return Result.fail(403, "權限不足，請聯繫管理員");
 	}
 
@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(RuntimeException.class)
 	public Result handleRuntimeException(RuntimeException e) {
-		log.error("伺服器發生問題: msg:{}", e);
+		log.error("伺服器發生問題 | error: ", e);
 		return Result.fail(500, "伺服器發生問題，請稍後再試或聯繫管理員");
 	}
 }

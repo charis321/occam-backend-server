@@ -65,10 +65,12 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
 
 			boolean matchSchool = !StringUtils.hasText(query.getSchool())
 					|| (vo.getSchool() != null && vo.getSchool().contains(query.getSchool()));
+			boolean matchDepartment = !StringUtils.hasText(query.getDepartment())
+					|| (vo.getDepartment() != null && vo.getDepartment().contains(query.getDepartment()));
 
 			boolean matchStatus = query.getStatus() == null || query.getStatus().equals(vo.getStatus());
 
-			return matchName && matchClassroom && matchSchool && matchStatus;
+			return matchName && matchClassroom && matchSchool && matchStatus&&matchDepartment;
 		}).sorted((a, b) -> b.getId().compareTo(a.getId())).collect(Collectors.toList());
 	}
 

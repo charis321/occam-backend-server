@@ -9,26 +9,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.charis.occam_spm_sys.entity.Course;
 import com.charis.occam_spm_sys.entity.Lesson;
 import com.charis.occam_spm_sys.mapper.LessonMapper;
 import com.charis.occam_spm_sys.model.dto.RollcallDTO;
 import com.charis.occam_spm_sys.model.vo.LessonDetailVO;
 import com.charis.occam_spm_sys.service.AttendanceService;
-import com.charis.occam_spm_sys.service.EnrollmentService;
 import com.charis.occam_spm_sys.service.LessonService;
 
 @Service
 public class LessonServiceImpl extends ServiceImpl<LessonMapper, Lesson> implements LessonService {
 
-//	@Autowired
-//	private CourseService courseService;
-
 	@Autowired
 	private AttendanceService attendanceService;
-
-	@Autowired
-	private EnrollmentService enrollmentService;
+	
+//  @Autowired
+//	private CourseService courseService;
+	
+//	@Autowired
+//	private EnrollmentService enrollmentService;
 
 	@Override
 	public List<Lesson> getLessonListByCourseId(Long courseId) {
@@ -76,13 +74,6 @@ public class LessonServiceImpl extends ServiceImpl<LessonMapper, Lesson> impleme
 		return this.removeById(lessonId);
 	}
 
-//	@Override
-//	public Boolean startRegistering(Lesson lesson) {
-//		if (lesson.getStatus() == 0)
-//			attendanceService.buildLessonAttendaces(lesson);
-//		lesson.setStatus(1);
-//		return this.updateById(lesson);
-//	}
 
 	@Override
 	public Lesson handleRollcall(Integer lessonId, RollcallDTO rollcall) {

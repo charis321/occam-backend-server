@@ -2,23 +2,32 @@ package com.charis.occam_spm_sys.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.charis.occam_spm_sys.entity.Attendance;
+import com.charis.occam_spm_sys.entity.Lesson;
+import com.charis.occam_spm_sys.exception.BusinessException;
 import com.charis.occam_spm_sys.mapper.AttendanceMapper;
+import com.charis.occam_spm_sys.mapper.LessonMapper;
+import com.charis.occam_spm_sys.model.dto.AttendanceDTO;
+import com.charis.occam_spm_sys.model.dto.AttendanceVerifyDTO;
 import com.charis.occam_spm_sys.model.vo.CourseAttendanceDetailVO;
 import com.charis.occam_spm_sys.model.vo.LessonAttendanceDetailVO;
 import com.charis.occam_spm_sys.model.vo.LessonAttendanceStatsVO;
 import com.charis.occam_spm_sys.model.vo.StudentAttendanceStatsVO;
 import com.charis.occam_spm_sys.service.AttendanceService;
-import com.charis.occam_spm_sys.service.EnrollmentService;
 
 @Service
 public class AttendanceServiceImpl extends ServiceImpl<AttendanceMapper, Attendance> implements AttendanceService {
+	
+	@Autowired
+	private LessonMapper lessonMapper;
 	
 	@Override
 	public Boolean deleteAttendancesByLessonId(Integer lessonId) {
@@ -64,20 +73,40 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceMapper, Attenda
 	}
 
 	@Override
-	public Boolean saveOrUpdateAttendance(Attendance attendance) {
+	@Transactional
+	public void saveOrUpdateAttendance(AttendanceDTO attendanceDTO) {
 
 		var wrapper = new LambdaUpdateWrapper<Attendance>();
 
-		wrapper.eq(Attendance::getLessonId, attendance.getLessonId())
-				.eq(Attendance::getStudentId, attendance.getStudentId())
-				.set(Attendance::getStatus, attendance.getStatus());
-
+		wrapper.eq(Attendance::getLessonId, attendanceDTO.getLessonId())
+			    .eq(Attendance::getStudentId, attendanceDTO.getStudentId())
+				.set(Attendance::getStatus, attendanceDTO.getStatus());
+	
 		Boolean res = this.update(wrapper);
-
-		if (!res)
-			return this.save(attendance);
-		return true;
+		
+		if (!res) { 
+			Attendance attendance = new Attendance();
+			BeanUtils.copyProperties(attendanceDTO, attendance);
+			this.save(attendance);
+		}
 	}
+	
+	@Override
+	@Transactional
+	public void verifyAndSaveAttendance(AttendanceVerifyDTO verifyDTO) {
+		Lesson lesson = lessonMapper.selectById(verifyDTO.getLessonId());
+		if (lesson == null) {
+	        throw new BusinessException(404, "找不到該堂課紀錄");
+	    }
+		if(lesson.getAttendanceCode().equals(verifyDTO.getAttendanceCode())) {
+			AttendanceDTO attendanceDTO = new AttendanceDTO();
+			BeanUtils.copyProperties(verifyDTO, attendanceDTO);
+			saveOrUpdateAttendance(attendanceDTO);
+		}else {
+			throw new BusinessException(400, "點名碼錯誤");
+		}
+	}
+	
 
 //	@Override
 //	public Boolean buildLessonAttendaces(Lesson lesson) {
@@ -108,5 +137,7 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceMapper, Attenda
 	public List<LessonAttendanceStatsVO> getLessonAttendanceStats(Long courseId) {
 		return baseMapper.selectStatsByLesson(courseId);
 	}
+
+	
 
 }

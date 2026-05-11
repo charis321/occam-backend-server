@@ -24,14 +24,14 @@ public class CourseQueryDTO {
 	private String school;
 	private String department;
 	
-    @Min(value = 1, message = "星期格式不正確")
-    @Max(value = 7, message = "星期格式不正確")
+    @Min(value = 1, message = "星期 格式不正確")
+    @Max(value = 7, message = "星期 格式不正確")
 	private Integer scheduleWeek;
 	
 	private LocalTime scheduleStartTime;
 	private LocalTime scheduleEndTime;
 	
-	@Positive(message = "課程時長必須為正整數")
+	@Positive(message = "課程時長 必須為正整數")
 	private Integer duration;
 	
 	private String classroom;
@@ -39,7 +39,7 @@ public class CourseQueryDTO {
 	@Size(max = 500, message = "備註內容過長")
 	private String info;
 	
-	@Min(value = 0, message = "狀態格式不正確")
-    @Max(value = 2, message = "狀態格式不正確")
+	@Min(value = 0, message = "狀態 格式不正確")
+    @Max(value = 2, message = "狀態 格式不正確")
 	private Integer status;
 }

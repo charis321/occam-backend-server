@@ -88,7 +88,7 @@ public interface AttendanceMapper extends BaseMapper<Attendance> {
 					count(1) filter(where attendance_status = 2) as excused_count,
 					count(1)as total_count
 					from course_attendances
-			where course_id = #{courseId}
+			where course_id = #{courseId} and lesson_attendance_status!= 0
 			group by student_id , student_name,student_school,student_department,student_no
 			order by student_no asc
 						""")

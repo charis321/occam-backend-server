@@ -1,7 +1,8 @@
 package com.charis.occam_spm_sys.service;
 
 import java.util.List;
-import java.util.Map;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.charis.occam_spm_sys.entity.User;
@@ -17,6 +18,7 @@ public interface UserService extends IService<User>{
 //	public Boolean existsByEmail(Long Email);
 	
 	public Boolean patchUserByQuery(UserQueryDTO query);
+	public void uploadAvatar(Long userId, MultipartFile file);
 	
 //	public List<UserInfoVO> getUserInfoVOList();
 	

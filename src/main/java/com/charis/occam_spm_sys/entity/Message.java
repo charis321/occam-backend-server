@@ -1,39 +1,35 @@
 package com.charis.occam_spm_sys.entity;
 
-import java.io.Serializable;
 import java.time.OffsetDateTime;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-@TableName("users")
-public class User implements Serializable {
-
-	@TableId(type = IdType.ASSIGN_ID)
+@TableName("messages")
+public class Message {
+	
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long id;
-	private String name;
-	private int sex;
-	private String email;
-	private String password;
-	private String no;
-	private String avatar;
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long senderId;
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Long receiverId;
 	
-	private String school;
-	private String department;
-	private int role;
-	private int status;
+	@Size(max=255 , message="字數過多，請控制在255字內")
+	private String title;
+	@Size(max=500 , message="字數過多，請控制在500字內")
+	private String body;
+	
+	private String attachment;
+	private boolean noted;
 	
 	@TableField(fill = FieldFill.INSERT)
 	private OffsetDateTime createTime;
-	@TableField(fill = FieldFill.INSERT_UPDATE)
-	private OffsetDateTime updateTime;
 }

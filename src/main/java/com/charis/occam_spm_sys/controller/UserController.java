@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.charis.occam_spm_sys.common.Result;
 import com.charis.occam_spm_sys.entity.User;
@@ -56,6 +58,14 @@ public class UserController {
 		return userService.patchUserByQuery(query)?Result.success("用戶更新成功"):Result.fail("用戶更新失敗");
 	}
 	
+	
+	@PatchMapping("/{userId}/avatar")
+	public Result patch(@PathVariable Long userId,
+						@RequestParam("file") MultipartFile file) {
+		log.debug("正在更新用戶頭像 | ID: {}", userId);
+		userService.uploadAvatar(userId, file);
+		return Result.success("用戶頭像更新成功");
+	}
 	
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{userId}")

@@ -18,6 +18,7 @@ import com.charis.occam_spm_sys.model.dto.CourseUpdateDTO;
 import com.charis.occam_spm_sys.model.vo.CourseDetailVO;
 import com.charis.occam_spm_sys.service.CourseService;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -40,7 +41,7 @@ public class CourseController {
 	}
 
 	@GetMapping("/student/{studentId}/course")
-	public Result getCourseListByStudentId(@PathVariable Long studentId, CourseQueryDTO query) {
+	public Result getCourseListByStudentId(@Valid @PathVariable Long studentId, CourseQueryDTO query) {
 		return Result.success(courseService.getCourseDetailVOByStudentId(studentId,query));
 	}
 	
@@ -52,7 +53,7 @@ public class CourseController {
 
 	@PreAuthorize("hasAnyRole('TEACHER','ADMIN')")
 	@GetMapping("/teacher/{teacherId}/course")
-	public Result getCourseByTeacher(@PathVariable Long teacherId, CourseQueryDTO query) {
+	public Result getCourseByTeacher(@Valid @PathVariable Long teacherId, CourseQueryDTO query) {
 		return Result.success(courseService.getCourseDetailVOByTeacherId(teacherId, query));
 	}
 
@@ -64,7 +65,7 @@ public class CourseController {
 
 	@PreAuthorize("hasAnyRole('TEACHER','ADMIN')")
 	@PatchMapping("/course/{courseId}")
-	public Result updateCourseById(@PathVariable Long courseId, @RequestBody CourseUpdateDTO dto) {
+	public Result updateCourseById(@Valid @PathVariable Long courseId, @RequestBody CourseUpdateDTO dto) {
 		return Result.success(courseService.updateCourse(courseId, dto));
 	}
 

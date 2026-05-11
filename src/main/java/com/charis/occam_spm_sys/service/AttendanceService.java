@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.charis.occam_spm_sys.entity.Attendance;
+import com.charis.occam_spm_sys.model.dto.AttendanceDTO;
+import com.charis.occam_spm_sys.model.dto.AttendanceVerifyDTO;
 import com.charis.occam_spm_sys.model.vo.CourseAttendanceDetailVO;
 import com.charis.occam_spm_sys.model.vo.LessonAttendanceDetailVO;
 import com.charis.occam_spm_sys.model.vo.LessonAttendanceStatsVO;
@@ -20,7 +22,8 @@ public interface AttendanceService extends IService<Attendance> {
 	public List<LessonAttendanceDetailVO> getLessonAttendanceDetail(Integer lessonId);
 	public List<CourseAttendanceDetailVO> getCourseAttendanceDetail(Long courseId);
 	
-	public Boolean saveOrUpdateAttendance(Attendance attendance);
+	public void saveOrUpdateAttendance(AttendanceDTO attendanceDTO);
+	public void verifyAndSaveAttendance(AttendanceVerifyDTO verifyDTO);
 	
 	public Boolean deleteAttendancesByLessonId(Integer lessonId);
 	public Boolean deleteAttendancesByLessonId(List<Integer> lessonIds);

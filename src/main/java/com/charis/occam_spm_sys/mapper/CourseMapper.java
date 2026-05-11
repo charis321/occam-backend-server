@@ -24,7 +24,6 @@ public interface CourseMapper extends BaseMapper<Course> {
 			GROUP BY c.id, u.name;
 					""")
 	public CourseDetailVO selectDetailById(Long courseId);
-
 	@Select("""
 			SELECT
 				c.*,

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,11 +19,12 @@ import org.springframework.util.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.charis.occam_spm_sys.common.JWTUtil;
 import com.charis.occam_spm_sys.common.OCPasswordEncoder;
-import com.charis.occam_spm_sys.common.Result;
 import com.charis.occam_spm_sys.entity.User;
 import com.charis.occam_spm_sys.exception.BusinessException;
 import com.charis.occam_spm_sys.model.dto.UserAuthDTO;
+import com.charis.occam_spm_sys.model.dto.UserLoginDTO;
 import com.charis.occam_spm_sys.model.dto.UserPasswordChangeDTO;
+import com.charis.occam_spm_sys.model.dto.UserRegisterDTO;
 import com.charis.occam_spm_sys.service.AuthService;
 import com.charis.occam_spm_sys.service.UserService;
 
@@ -47,24 +49,28 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public UserAuthDTO login(User user) {
-		log.debug("正在登入用戶");
-		User existingUser = userService.findUserByEmail(user.getEmail());
+	public UserAuthDTO login(UserLoginDTO dto) {
+		log.debug("正在登入用戶 | Email: ",dto.getEmail());		
+		User existingUser = userService.findUserByEmail(dto.getEmail());
 		if (existingUser == null)
 			throw new BusinessException(401, "帳號或密碼錯誤!");
 		if (existingUser.getStatus() == 1)
 			throw new BusinessException(403, "此用戶已停用!");
 
-		if (!ocPasswordEncoder.matches(user.getPassword(), existingUser.getPassword())) {
+		if (!ocPasswordEncoder.matches(dto.getPassword(), existingUser.getPassword())) {
 			throw new BusinessException(401, "帳號或密碼錯誤!");
 		}
 		try {
 			Authentication authentication = authenticationManager
-					.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+					.authenticate(new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword()));
 			if (authentication.isAuthenticated()) {
 				String token = jwtUtil.generateToken(existingUser);
 
-				return new UserAuthDTO(existingUser.getId(), existingUser.getName(), existingUser.getRole(), existingUser.getSex(), token);
+				return new UserAuthDTO(existingUser.getId(), 
+										existingUser.getName(), 
+										existingUser.getRole(),
+										existingUser.getSex(), 
+										existingUser.getAvatar(), token);
 			}
 		} catch (AuthenticationException e) {
 			log.warn("身分驗證失敗 | msg: " + e.getMessage());
@@ -74,60 +80,66 @@ public class AuthServiceImpl implements AuthService {
 		throw new BusinessException(500, "登入程序發生未預期錯誤");
 	}
 
-
 	@Override
-	public void register(User user) {
-		log.debug("正在註冊用戶");
+	public void register(UserRegisterDTO user) {
+		log.debug("正在註冊用戶 | User: {} Name: {} Email: {}",user, user.getName(),user.getEmail());
 		User existingUser = userService.findUserByEmail(user.getEmail());
 		if (existingUser != null)
 			throw new BusinessException(401, "註冊失敗: 此信箱已被使用");
 
-		String password = ocPasswordEncoder.encode(user.getPassword());
-		user.setPassword(password);
-		user.setRole(0);
+		User newUser = new User();
+		BeanUtils.copyProperties(user, newUser);
+		
+		String password = generateUserPassword(user);
+		user.setPassword(ocPasswordEncoder.encode(password));
 
-		boolean saved = userService.save(user);
-	    if (!saved) {
-	        log.error("用戶註冊寫入資料庫失敗 | Email: {}", user.getEmail());
-	        throw new BusinessException(500, "註冊系統繁忙，請稍後再試");
-	    }
+		boolean saved = userService.save(newUser);
+		if (!saved) {
+			log.error("用戶註冊寫入資料庫失敗 | Email: {}", user.getEmail());
+			throw new BusinessException(500, "註冊系統繁忙，請稍後再試");
+		}
 	}
 
 	@Override
 	@Transactional
-	public void registerBatch(List<User> users) {
+	public void registerBatch(List<UserRegisterDTO> users) {
 		log.debug("正在批量註冊用戶");
 		if (CollectionUtils.isEmpty(users))
 			throw new BusinessException(400, "批量註冊失敗: 資料不符合規範!");
 
-		List<String> emails = users.stream().map(User::getEmail).distinct().collect(Collectors.toList());
+		List<String> emails = users.stream().map(UserRegisterDTO::getEmail).distinct().collect(Collectors.toList());
 		List<User> existingUsers = userService.findUsersByEmail(emails);
 		Set<String> existingEmailSet = existingUsers.stream().map(User::getEmail).collect(Collectors.toSet());
 
 		List<User> userListWithPwd = new ArrayList<>();
-		List<User> invalidUserList = new ArrayList<>();
+		List<UserRegisterDTO> invalidList = new ArrayList<>();
 
-		for (User user : users) {
+		for (UserRegisterDTO user : users) {
 			if (existingEmailSet.contains(user.getEmail())) {
-				invalidUserList.add(user);
+				invalidList.add(user);
 			} else {
+				User newUser = new User();
+				BeanUtils.copyProperties(user, newUser);
+				
 				String password = generateUserPassword(user);
-				user.setPassword(ocPasswordEncoder.encode(password));
-				userListWithPwd.add(user);
+				newUser.setPassword(ocPasswordEncoder.encode(password));
+			
+				
+				userListWithPwd.add(newUser);
 			}
 
 		}
 
-		if (!invalidUserList.isEmpty()) {
-			log.warn("批量註冊寫入資料庫失敗 | invalidUserList:{}", invalidUserList);
-			throw new BusinessException(400, "批量註冊失敗: 存在不合規的資料", invalidUserList);
+		if (!invalidList.isEmpty()) {
+			log.warn("批量註冊寫入資料庫失敗 | invalidUserList:{}", invalidList);
+			throw new BusinessException(400, "批量註冊失敗: 存在不合規的資料", invalidList);
 		}
 		Boolean saved = userService.saveBatch(userListWithPwd);
-				
-		if(!saved) {
+
+		if (!saved) {
 			log.error("批量註冊寫入資料庫失敗");
 			throw new BusinessException(500, "註冊系統繁忙，請稍後再試");
-				
+
 		}
 	}
 
@@ -144,15 +156,15 @@ public class AuthServiceImpl implements AuthService {
 
 		var updateWrapper = new LambdaUpdateWrapper<User>().eq(User::getId, user.getId());
 		updateWrapper.set(User::getPassword, ocPasswordEncoder.encode(dto.getNewPwd()));
-		
+
 		Boolean updated = userService.update(updateWrapper);
-		if(!updated) {
+		if (!updated) {
 			log.error("更改密碼失敗");
 			throw new BusinessException(500, "系統繁忙，請稍後再試");
 		}
 	}
 
-	private String generateUserPassword(User user) {
+	private String generateUserPassword(UserRegisterDTO user) {
 		String password = user.getPassword();
 		if (StringUtils.hasText(password)) {
 			return password;

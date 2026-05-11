@@ -1,8 +1,8 @@
 CREATE TABLE "users" (
     "id" BIGINT NOT NULL,
-    "email" VARCHAR(255),
-    "name" VARCHAR(255),
-    "sex" INTEGER,
+    "email" VARCHAR(255) NOT NULL,
+    "name" VARCHAR(255) NOT NULL,
+    "sex" INTEGER NOT NULL,
     "no" VARCHAR(255),
     "password" VARCHAR(255),
     "school" VARCHAR(255),

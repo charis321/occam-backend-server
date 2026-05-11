@@ -16,11 +16,23 @@ spring:
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
     default-schema: public
+    clear-checksums: true
   http:
     encoding:
       force: true
 
 mybatis-plus:
-  mapper-locations: classpath*:/mapper/**/*.xml
-  map-underscore-to-camel-case: true
+    mapper-locations: classpath*:/mapper/**/*.xml
+    map-underscore-to-camel-case: true
   
+cloudinary:
+    cloud-name: ${CLOUDINARY_CLOUD_NAME}
+    api-key: ${CLOUDINARY_API_KEY}
+    api-secret: ${CLOUDINARY_API_SECRET}
+    
+logging:
+    level:
+      root: INFO                             
+      com.charis.occam_spm_sys: DEBUG
+    
+    

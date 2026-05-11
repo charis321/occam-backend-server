@@ -1,5 +1,5 @@
 CREATE TABLE "lessons" (
-    "id" SERIAL NOT NULL,
+     "id" SERIAL NOT NULL,
     "course_id" BIGINT NOT NULL,
     "teacher_id" BIGINT NOT NULL,
     "start_time" TIMESTAMPTZ  NOT NULL,
