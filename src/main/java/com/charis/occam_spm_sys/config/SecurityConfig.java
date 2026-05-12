@@ -4,12 +4,11 @@ package com.charis.occam_spm_sys.config;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,7 +21,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.charis.occam_spm_sys.filter.JWTAuthFilter;
-import com.charis.occam_spm_sys.security.OCAuthenticationProvider;
 
 @Configuration
 @EnableWebSecurity()
@@ -31,6 +29,9 @@ public class SecurityConfig{
 	
 	@Autowired
 	private JWTAuthFilter jwtAuthFilter;
+	
+	@Value("${app.cors.allowed-origins}")
+    private String allowedOrigins;
 	
 //	@Autowired
 //	private OCAuthenticationProvider ocAuthenticationProvider;
@@ -55,7 +56,7 @@ public class SecurityConfig{
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:5173", "http://127.0.0.1:5173"));
+        configuration.setAllowedOriginPatterns(Arrays.asList(allowedOrigins.split(",")));
         configuration.setAllowCredentials(true);
         
         configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
