@@ -11,10 +11,9 @@ import org.springframework.util.CollectionUtils;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.charis.occam_spm_sys.entity.Attendance;
-import com.charis.occam_spm_sys.entity.Lesson;
+import com.charis.occam_spm_sys.entity.Rollcall;
 import com.charis.occam_spm_sys.exception.BusinessException;
 import com.charis.occam_spm_sys.mapper.AttendanceMapper;
-import com.charis.occam_spm_sys.mapper.LessonMapper;
 import com.charis.occam_spm_sys.model.dto.AttendanceDTO;
 import com.charis.occam_spm_sys.model.dto.AttendanceVerifyDTO;
 import com.charis.occam_spm_sys.model.vo.CourseAttendanceDetailVO;
@@ -22,12 +21,13 @@ import com.charis.occam_spm_sys.model.vo.LessonAttendanceDetailVO;
 import com.charis.occam_spm_sys.model.vo.LessonAttendanceStatsVO;
 import com.charis.occam_spm_sys.model.vo.StudentAttendanceStatsVO;
 import com.charis.occam_spm_sys.service.AttendanceService;
+import com.charis.occam_spm_sys.service.RollcallService;
 
 @Service
 public class AttendanceServiceImpl extends ServiceImpl<AttendanceMapper, Attendance> implements AttendanceService {
 	
 	@Autowired
-	private LessonMapper lessonMapper;
+	private RollcallService rollcallService;
 	
 	@Override
 	public Boolean deleteAttendancesByLessonId(Integer lessonId) {
@@ -94,11 +94,11 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceMapper, Attenda
 	@Override
 	@Transactional
 	public void verifyAndSaveAttendance(AttendanceVerifyDTO verifyDTO) {
-		Lesson lesson = lessonMapper.selectById(verifyDTO.getLessonId());
-		if (lesson == null) {
-	        throw new BusinessException(404, "找不到該堂課紀錄");
+		Rollcall rollcall = rollcallService.getById(verifyDTO.getLessonId());
+		if (rollcall == null) {
+	        throw new BusinessException(404, "找不到該堂課或此課程尚未開啟點名");
 	    }
-		if(lesson.getAttendanceCode().equals(verifyDTO.getAttendanceCode())) {
+		if(rollcall.getCode().equals(verifyDTO.getCode())) {
 			AttendanceDTO attendanceDTO = new AttendanceDTO();
 			BeanUtils.copyProperties(verifyDTO, attendanceDTO);
 			saveOrUpdateAttendance(attendanceDTO);

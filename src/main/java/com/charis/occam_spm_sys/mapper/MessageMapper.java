@@ -31,7 +31,7 @@ public interface MessageMapper extends BaseMapper<Message> {
 			left join "users" ru
 			on ru.id = m.receiver_id
 			where sender_id = #{senderId}
-			order by m.create_time asc
+			order by m.create_time desc
 			""")
 	public List<MessageVO> selectBySenderId(Long senderId);
 	
@@ -53,7 +53,7 @@ public interface MessageMapper extends BaseMapper<Message> {
 			left join "users" ru
 			on ru.id = m.receiver_id
 			where receiver_id = #{receiverId}
-			order by m.create_time asc
+			order by m.create_time desc
 			""")
 	public List<MessageVO> selectByReceiverId(Long receiverId);
 }

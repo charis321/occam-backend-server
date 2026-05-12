@@ -75,13 +75,13 @@ public class LessonServiceImpl extends ServiceImpl<LessonMapper, Lesson> impleme
 	}
 
 
-	@Override
-	public Lesson handleRollcall(Integer lessonId, RollcallDTO rollcall) {
-		this.lambdaUpdate().eq(Lesson::getId, lessonId)
-						   .set(Lesson::getAttendanceStatus, rollcall.getAttendance_status())
-						   .set(Lesson::getAttendanceCode, rollcall.getAttendance_code())
-						   .update();
-		return this.getById(lessonId);
-	}
+//	@Override
+//	public Lesson handleRollcall(Integer lessonId, RollcallDTO rollcall) {
+//		this.lambdaUpdate().eq(Lesson::getId, lessonId)
+//						   .set(Lesson::getAttendanceStatus, rollcall.getAttendance_status())
+//						   .set(Lesson::getAttendanceCode, rollcall.getAttendance_code())
+//						   .update();
+//		return this.getById(lessonId);
+//	}
 
 }

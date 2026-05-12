@@ -2,6 +2,7 @@ package com.charis.occam_spm_sys.exception;
 
 import java.sql.SQLException;
 
+import org.springframework.messaging.MessageDeliveryException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -33,7 +34,7 @@ public class GlobalExceptionHandler {
 		log.warn("權限不足嘗試訪問 | msg:{}", e.getMessage());
 		return Result.fail(403, "權限不足，請聯繫管理員");
 	}
-
+	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public Result handleValidationException(MethodArgumentNotValidException e) {
 		var fieldError = e.getBindingResult().getFieldError();

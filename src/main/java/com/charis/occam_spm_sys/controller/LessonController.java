@@ -83,13 +83,13 @@ public class LessonController {
 //		
 //		return Result.success(data);
 //	}
-	
-	@PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
-	@PatchMapping("/lesson/{lessonId}/rollcall")
-	public Result updateLessonAttendanceStatus(@PathVariable Integer lessonId,
-											   @RequestBody  RollcallDTO rollcall) {
-		return Result.success(lessonService.handleRollcall(lessonId, rollcall));
-	}
+//	
+//	@PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
+//	@PatchMapping("/lesson/{lessonId}/rollcall")
+//	public Result updateLessonAttendanceStatus(@PathVariable Integer lessonId,
+//											   @RequestBody  RollcallDTO rollcall) {
+//		return Result.success(lessonService.handleRollcall(lessonId, rollcall));
+//	}
 
 	@PostMapping("/course/{courseId}/lesson")
 	public Result createLesson(@RequestBody Lesson lesson) {

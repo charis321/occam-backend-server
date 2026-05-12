@@ -9,5 +9,5 @@ import lombok.EqualsAndHashCode;
 public class AttendanceVerifyDTO extends AttendanceDTO{
 	
 	@NotBlank(message="點名碼 不可為空")
-	private String attendanceCode;
+	private String code;
 }

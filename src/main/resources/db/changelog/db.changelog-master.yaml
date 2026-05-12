@@ -13,6 +13,8 @@ databaseChangeLog:
       file: db/changelog/changes/001-create-table-users.sql
   - include:
       file: db/changelog/changes/002-alter-table-users.sql
+  - include:
+      file: db/changelog/changes/001-create-table-rollcalls.sql
   
   - include:
       file: db/changelog/changes/999-view-course-attendance.yaml

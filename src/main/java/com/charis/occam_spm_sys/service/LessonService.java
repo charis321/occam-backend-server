@@ -18,6 +18,6 @@ public interface LessonService extends IService<Lesson>{
 	public Boolean deleteLesson(Integer lessonId);
 	public Boolean deleteLessonsByCourseId(Long courseId);
 	
-	public Lesson handleRollcall(Integer lessonId, RollcallDTO rollcall);
+//	public Lesson handleRollcall(Integer lessonId, RollcallDTO rollcall);
 //	public Boolean startRegistering(Lesson lesson);
 }
