@@ -11,22 +11,19 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.charis.occam_spm_sys.entity.Lesson;
 import com.charis.occam_spm_sys.mapper.LessonMapper;
-import com.charis.occam_spm_sys.model.dto.RollcallDTO;
 import com.charis.occam_spm_sys.model.vo.LessonDetailVO;
 import com.charis.occam_spm_sys.service.AttendanceService;
 import com.charis.occam_spm_sys.service.LessonService;
+import com.charis.occam_spm_sys.service.RollcallService;
 
 @Service
 public class LessonServiceImpl extends ServiceImpl<LessonMapper, Lesson> implements LessonService {
 
 	@Autowired
 	private AttendanceService attendanceService;
+	@Autowired
+	private RollcallService rollcallService;
 	
-//  @Autowired
-//	private CourseService courseService;
-	
-//	@Autowired
-//	private EnrollmentService enrollmentService;
 
 	@Override
 	public List<Lesson> getLessonListByCourseId(Long courseId) {
@@ -40,6 +37,12 @@ public class LessonServiceImpl extends ServiceImpl<LessonMapper, Lesson> impleme
 	public LessonDetailVO getLessonDetailById(Integer lessonId) {
 		return baseMapper.selectDetailById(lessonId);
 	}
+	
+	@Override
+	public List<LessonDetailVO> getLessonDetailsByCourseId(Long courseId){
+		return baseMapper.selectDetailsByCourseId(courseId);
+	}
+	
 	@Override
 	public List<LessonDetailVO> getLessonDetailsByTeacherId(Long teacherId) {
 		return baseMapper.selectDetailsByTeacherId(teacherId);
@@ -49,10 +52,18 @@ public class LessonServiceImpl extends ServiceImpl<LessonMapper, Lesson> impleme
 	public List<LessonDetailVO> getLessonDetailsByStudentId(Long studentId) {
 		return baseMapper.selectDetailsByStudentId(studentId);
 	}
+	
 	@Override
-	public List<LessonDetailVO> getLessonDetailsByCourseId(Long courseId){
-		return baseMapper.selectDetailsByCourseId(courseId);
+	public List<LessonDetailVO> getTodayLessonDetailsByTeacherId(Long teacherId) {
+		return baseMapper.selectTodayDetailsByTeacherId(teacherId);
 	}
+
+	@Override
+	public List<LessonDetailVO> getTodayLessonDetailsByStudentId(Long studentId) {
+		return baseMapper.selectTodayDetailsByStudentId(studentId);
+	}
+	
+	
 
 	@Override
 	@Transactional
@@ -64,6 +75,7 @@ public class LessonServiceImpl extends ServiceImpl<LessonMapper, Lesson> impleme
 					.stream().map(l -> l.getId()).collect(Collectors.toList());
 
 		attendanceService.deleteAttendancesByLessonId(lessonIds);
+		rollcallService.removeBatchByIds(lessonIds);
 		return this.remove(queryWrapper);
 	}
 
@@ -71,6 +83,7 @@ public class LessonServiceImpl extends ServiceImpl<LessonMapper, Lesson> impleme
 	@Transactional
 	public Boolean deleteLesson(Integer lessonId) {
 		attendanceService.deleteAttendancesByLessonId(lessonId);
+		rollcallService.removeById(lessonId);
 		return this.removeById(lessonId);
 	}
 

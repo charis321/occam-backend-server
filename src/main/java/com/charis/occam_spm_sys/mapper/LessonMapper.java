@@ -25,11 +25,13 @@ public interface LessonMapper extends BaseMapper<Lesson> {
 			SELECT l.*,
 			       u.name as teacher_name,
 			       c."name" as course_name,
+			       r.status as rollcall_status,
 			       ROW_NUMBER() OVER (
 			           PARTITION BY l.course_id
 			           ORDER BY l.start_time ASC
 			       ) as lesson_index
 			FROM lessons l
+			LEFT JOIN rollcalls r ON l.id = r.lesson_id
 			LEFT JOIN users u ON l.teacher_id = u.id
 			LEFT JOIN courses c ON l.course_id = c.id
 			WHERE l.id = #{lessonId}
@@ -41,11 +43,13 @@ public interface LessonMapper extends BaseMapper<Lesson> {
 			SELECT l.*,
 			       u.name as teacher_name,
 			       c."name" as course_name,
+			       r.status as rollcall_status,
 			       ROW_NUMBER() OVER (
 			           PARTITION BY l.course_id
 			           ORDER BY l.start_time ASC
 			       ) as lesson_index
 			FROM lessons l
+			LEFT JOIN rollcalls r ON l.id = r.lesson_id
 			LEFT JOIN users u ON l.teacher_id = u.id
 			LEFT JOIN courses c ON l.course_id = c.id
 			WHERE l.course_id = #{courseId}
@@ -57,27 +61,65 @@ public interface LessonMapper extends BaseMapper<Lesson> {
 			SELECT  e.course_id ,
 			        e.student_id,
 			        l.*,
-			        c."name" as course_name
+			        c."name" as course_name,
+			        r.status as rollcall_status
 			FROM enrollments e
 			INNER JOIN courses c ON c.id = e.course_id 
-			LEFT JOIN lessons l ON e.course_id = l.course_id 
+			INNER JOIN lessons l ON e.course_id = l.course_id 
+			LEFT JOIN rollcalls r ON l.id = r.lesson_id
 			WHERE e.student_id = #{studentId}
 			""")
 	List<LessonDetailVO> selectDetailsByStudentId(Long studentId);
 	
 	@Select("""
+			SELECT  e.course_id ,
+			        e.student_id,
+			        l.*,
+			        c."name" as course_name,
+			        r.status as rollcall_status
+			FROM enrollments e
+			INNER JOIN courses c ON c.id = e.course_id 
+			INNER JOIN lessons l ON e.course_id = l.course_id 
+			LEFT JOIN rollcalls r ON l.id = r.lesson_id
+			WHERE e.student_id = #{studentId} AND l.start_time::date = CURRENT_DATE
+			""")
+	List<LessonDetailVO> selectTodayDetailsByStudentId(Long studentId);
+	
+	
+	
+	@Select("""
 			SELECT l.*,
 			       u.name as teacher_name,
 			       c."name" as course_name,
+			       r.status as rollcall_status,
 			       ROW_NUMBER() OVER (
 			           PARTITION BY l.course_id
 			           ORDER BY l.start_time ASC
 			       ) as lesson_index
 			FROM lessons l
+			LEFT JOIN rollcalls r ON l.id = r.lesson_id
 			LEFT JOIN users u ON l.teacher_id = u.id
 			LEFT JOIN courses c ON l.course_id = c.id
-			WHERE l.teacher_id = #{teacherId}
-			ORDER BY l.course_id ASC, l.start_time ASC
+			WHERE l.teacher_id = #{teacherId} 
+			ORDER BY  l.start_time ASC, l.course_id ASC
 			""")
 	List<LessonDetailVO> selectDetailsByTeacherId(Long teacherId);
+	
+	@Select("""
+			SELECT l.*,
+			       u.name as teacher_name,
+			       c."name" as course_name,
+			       r.status as rollcall_status,
+			       ROW_NUMBER() OVER (
+			           PARTITION BY l.course_id
+			           ORDER BY l.start_time ASC
+			       ) as lesson_index
+			FROM lessons l
+			LEFT JOIN rollcalls r ON l.id = r.lesson_id
+			LEFT JOIN users u ON l.teacher_id = u.id
+			LEFT JOIN courses c ON l.course_id = c.id
+			WHERE l.teacher_id = #{teacherId} AND l.start_time::date = CURRENT_DATE
+			ORDER BY l.start_time ASC, l.course_id ASC 
+			""")
+	List<LessonDetailVO> selectTodayDetailsByTeacherId(Long teacherId);
 }

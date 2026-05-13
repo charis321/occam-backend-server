@@ -12,7 +12,7 @@ public class LessonAttendanceStatsVO {
 	
 	private Integer lessonId;
 	private String lessonIndex;
-	private Integer lessonAttendanceStatus;
+	private Integer rollcallStatus;
 	private OffsetDateTime startTime;
 	private OffsetDateTime endTime;
 

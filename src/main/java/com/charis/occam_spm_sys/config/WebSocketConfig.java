@@ -3,6 +3,7 @@ package com.charis.occam_spm_sys.config;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -37,6 +38,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	@Autowired
 	private OCUserDetailsService ocUserDetailsService;
 	
+	@Value("${app.cors.allowed-origins}")
+    private String allowedOrigins;
+	
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         // 開啟一個簡單的記憶體訊息代理
@@ -50,7 +54,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // 註冊 WebSocket 連線端點，允許跨域
         registry.addEndpoint("/ws")
-        		.setAllowedOriginPatterns("http://localhost:5173")	
+        		.setAllowedOriginPatterns(allowedOrigins)	
                 .withSockJS(); // 支援 SockJS 回退機制
     }
     

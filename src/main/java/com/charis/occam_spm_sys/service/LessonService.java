@@ -13,6 +13,9 @@ public interface LessonService extends IService<Lesson>{
 	public List<LessonDetailVO> getLessonDetailsByTeacherId(Long teacherId);
 	public List<LessonDetailVO> getLessonDetailsByStudentId(Long studentId);
 	
+	public List<LessonDetailVO> getTodayLessonDetailsByTeacherId(Long teacherId);
+	public List<LessonDetailVO> getTodayLessonDetailsByStudentId(Long studentId);
+	
 	public List<LessonDetailVO> getLessonDetailsByCourseId(Long courseId);
 	
 	public Boolean deleteLesson(Integer lessonId);

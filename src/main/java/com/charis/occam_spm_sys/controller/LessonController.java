@@ -48,6 +48,17 @@ public class LessonController {
 	public Result getLessonsByStudent(@PathVariable Long studentId) {
 		return Result.success(lessonService.getLessonDetailsByStudentId(studentId));
 	}
+	
+	@GetMapping("/lesson/student/{studentId}/today")
+	public Result getTodayLessonsByStudent(@PathVariable Long studentId) {
+		return Result.success(lessonService.getTodayLessonDetailsByStudentId(studentId));
+	}
+	
+	@GetMapping("/lesson/teacher/{teacherId}/today")
+	public Result getTodayLessonsByTeacher(@PathVariable Long teacherId) {
+		return Result.success(lessonService.getTodayLessonDetailsByTeacherId(teacherId));
+	}
+	
 
 	@GetMapping("/course/{courseId}/lesson")
 	public Result getLessonsByCourse(@PathVariable Long courseId) {

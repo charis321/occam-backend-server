@@ -21,8 +21,7 @@ public class LessonDetailVO {
 	private OffsetDateTime endTime;
 	
 	private String classroom;
-	private int attendanceStatus;
-	private String attendanceCode;
+	private int rollcallStatus;
 	private int status;
 	
 	private OffsetDateTime createTime;

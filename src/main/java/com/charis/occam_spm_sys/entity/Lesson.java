@@ -29,8 +29,6 @@ public class Lesson {
 	private OffsetDateTime endTime;
 	
 	private String classroom;
-	private int attendanceStatus;
-	private String attendanceCode;
 	private int status;
 	
 	@TableField(fill = FieldFill.INSERT)

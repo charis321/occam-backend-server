@@ -1,8 +1,10 @@
 package com.charis.occam_spm_sys.service.impl;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,6 +24,8 @@ import com.charis.occam_spm_sys.exception.BusinessException;
 import com.charis.occam_spm_sys.mapper.LessonMapper;
 import com.charis.occam_spm_sys.mapper.RollcallMapper;
 import com.charis.occam_spm_sys.model.dto.RollcallDTO;
+import com.charis.occam_spm_sys.model.dto.RollcallQueryDTO;
+import com.charis.occam_spm_sys.model.vo.RollcallDetailVO;
 import com.charis.occam_spm_sys.model.vo.RollcallVO;
 import com.charis.occam_spm_sys.service.RollcallService;
 
@@ -65,6 +69,7 @@ public class RollcallServiceImpl extends ServiceImpl<RollcallMapper, Rollcall> i
 		if(rollcallDTO.getMode()==0) {
 			if(rollcallDTO.getStatus()==1){
 				if(rollcallDTO.getRotationTime()>0) startRotation(rollcallDTO);
+				if(rollcallDTO.getEndTime()!=null) startAutoShutdown(rollcallDTO);
 			}else {
 				stopRotation(rollcallDTO.getLessonId());
 			}			
@@ -116,6 +121,30 @@ public class RollcallServiceImpl extends ServiceImpl<RollcallMapper, Rollcall> i
 		
 		rotationTasks.put(rollcallDTO.getLessonId(), task);  
 	}
+	private void startAutoShutdown(RollcallDTO rollcallDTO) {
+		long delay = Duration.between(OffsetDateTime.now(), rollcallDTO.getEndTime()).toSeconds();
+		if(delay>0) {
+			var task =  taskScheduler.schedule(() -> {
+				log.info("觸發自動關閉點名任務 | lessonId: {}", rollcallDTO.getLessonId());
+
+	            this.lambdaUpdate()
+	                .eq(Rollcall::getLessonId, rollcallDTO.getLessonId())
+	                .set(Rollcall::getStatus, 2)
+	                .set(Rollcall::getRotationTime, 0)
+	                .set(Rollcall::getNextRotationTime, 0)
+	                .set(Rollcall::getCode, null)
+	                .update();
+
+
+	            stopRotation(rollcallDTO.getLessonId());
+	            
+	            String destination = "/topic/rollcall/" + rollcallDTO.getLessonId() + "/status";
+	            messagingTemplate.convertAndSend(destination, Map.of("status", 0, "message", "點名已自動結束"));
+	            
+			}, Instant.now().plusSeconds(delay));
+		}
+		
+	}
 	
 	private void stopRotation(Integer lessonId) {
 		ScheduledFuture<?> task = rotationTasks.remove(lessonId);
@@ -127,6 +156,28 @@ public class RollcallServiceImpl extends ServiceImpl<RollcallMapper, Rollcall> i
 	
 	private String generateRollcallCode() {
 		return String.format("%06d", RANDOM.nextInt(1000000));
+	}
+
+
+	@Override
+	public List<RollcallDetailVO> getRollcallingsByStudentId(Long studentId) {
+		return baseMapper.selectRollcallingByStudentId(studentId);
+	}
+
+	@Override
+	public List<RollcallDetailVO> getRollcallingsByTeacherId(Long teacherId) {
+		return baseMapper.selectRollcallingByTeacherId(teacherId);
+	}
+
+	@Override
+	public List<RollcallVO> getRollcallsByQuery(RollcallQueryDTO queryDTO) {
+//			List<RollcallVO> voList = this.lambdaQuery().eq(queryDTO.getLessonId()!=null, Rollcall::getLessonId, queryDTO.getLessonId())
+//										  .eq(queryDTO.getMode()!=null, Rollcall::getMode, queryDTO.getMode())
+//										  .eq(queryDTO.getMode()!=null, Rollcall::getMode, queryDTO.getMode())
+//										  .eq(queryDTO.getStatus()!=null, Rollcall::getStatus, queryDTO.getStatus())
+//										  .list();
+//			return voList;
+			return null;
 	}
 
 }

@@ -28,11 +28,17 @@ public class FileUploadServiceImpl implements FileUploadService {
 	public String uploadAvatar(Long userId ,MultipartFile file){
 		try {
 			Map uploadResult = cloudinary.uploader()
-										 .upload(file.getBytes(), Map.of("folder", "occam_avatar","public_id", userId.toString()));
+										 .upload(file.getBytes(), Map.of("folder", "occam_avatar",
+												 						 "public_id", userId.toString(),
+												 						 "overwrite", true, 
+												 						 "invalidate", true));
 			String publicId = uploadResult.get("public_id").toString();
+			String version = uploadResult.get("version").toString();
+			
 			return  cloudinary.url()
 				    .transformation(new Transformation().width(150).height(150).crop("fill"))
 				    .secure(true)
+				    .version(version)
 				    .generate(publicId);
 		}catch(Exception e){
 			log.warn("cloudinary上傳服務發生錯誤 | msg: {}",e.getMessage());

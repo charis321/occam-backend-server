@@ -18,11 +18,16 @@ public class MessageVO {
 	private Long senderId;
 	private String senderName;
 	private int senderRole;
+	private String senderEmail;
+	private String senderNo;
+	
 	
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long receiverId;
 	private String receiverName;
 	private int receiverRole;
+	private String receiverEmail;
+	private String receiverNo;
 	
 	private String title;
 	private String body;

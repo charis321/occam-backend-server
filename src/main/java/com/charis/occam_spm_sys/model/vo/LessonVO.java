@@ -13,8 +13,6 @@ public class LessonVO {
 	private OffsetDateTime endTime;
 	
 	private String classroom;
-	private int attendanceStatus;
-	private String attendanceCode;
 	private int status;
 	
 	private OffsetDateTime createTime;
