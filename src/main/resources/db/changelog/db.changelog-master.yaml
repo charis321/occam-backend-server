@@ -1,20 +1,28 @@
 databaseChangeLog:
+  # 1. 基础表（不依赖其他表的，如 Users, Courses）
   - include:
-      file: db/changelog/changes/001-create-table-attendances.sql
+      file: db/changelog/changes/001-create-table-users.sql
   - include:
       file: db/changelog/changes/001-create-table-courses.sql
+
+  # 2. 修改基础表（如果有必要）
   - include:
-      file: db/changelog/changes/001-create-table-enrollments.sql
+      file: db/changelog/changes/002-alter-table-users.sql
+
+  # 3. 中间表（依赖 Users 或 Courses 的，如 Lessons）
   - include:
       file: db/changelog/changes/001-create-table-lessons.sql
   - include:
       file: db/changelog/changes/001-create-table-messages.sql
+
+  # 4. 关联表（依赖 Lessons, Users 等多张表的，如 Enrollments, Attendances, Rollcalls）
   - include:
-      file: db/changelog/changes/001-create-table-users.sql
-  - include:
-      file: db/changelog/changes/002-alter-table-users.sql
+      file: db/changelog/changes/001-create-table-enrollments.sql
   - include:
       file: db/changelog/changes/001-create-table-rollcalls.sql
-  
+  - include:
+      file: db/changelog/changes/001-create-table-attendances.sql
+
+  # 5. 视图（依赖以上所有表）
   - include:
       file: db/changelog/changes/999-view-course-attendance.yaml
