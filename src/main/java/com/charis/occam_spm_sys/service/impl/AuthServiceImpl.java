@@ -145,7 +145,7 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	public void changePassword(UserPasswordChangeDTO dto) {
-		log.debug("正在處理用戶更改密碼，User Id: {}", dto.getUserId());
+		log.debug("正在處理用戶更改密碼 | User Id: {}", dto.getUserId());
 		User user = userService.getById(dto.getUserId());
 		if (user == null)
 			throw new BusinessException(400, "更改密碼失敗: 用戶id不存在");
@@ -153,6 +153,10 @@ public class AuthServiceImpl implements AuthService {
 			log.warn("更改密碼失敗: 舊密碼錯誤 | User Id: {}", dto.getUserId());
 			throw new BusinessException(400, "更改密碼失敗: 舊密碼錯誤");
 		}
+		if (ocPasswordEncoder.matches(dto.getNewPwd(), user.getPassword())) {
+			log.warn("更改密碼失敗: 新密碼與當前密碼相同 | User Id: {}", dto.getUserId());
+            throw new BusinessException(400, "更改密碼失敗: 新密碼不可與當前密碼相同，請更換其他密碼");
+        }
 
 		var updateWrapper = new LambdaUpdateWrapper<User>().eq(User::getId, user.getId());
 		updateWrapper.set(User::getPassword, ocPasswordEncoder.encode(dto.getNewPwd()));
